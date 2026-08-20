@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
 
+# Permissão mínima: este job só faz checkout e chama a Cloudflare com um token de secret —
+# não escreve no repositório e não usa OIDC. Sem esta declaração o workflow herda o padrão
+# da organização, que costuma ser ESCRITA em tudo, e esse token fica ao alcance da action
+# de terceiro que roda no mesmo job.
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
