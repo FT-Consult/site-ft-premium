@@ -1,0 +1,31 @@
+# Dependabot — version updates.
+#
+# POR QUE EXISTE (achado na varredura da carteira em 2026-08-20, FB-050 da fábrica):
+# este repositório **não tinha este arquivo**, e é o mesmo defeito que o Cockpit CEO teve
+# até 2026-08-15 — repositório com GitHub Actions em produção e ninguém vigiando as actions.
+#
+# O que roda aqui não é pouco: o `deploy.yml` usa `actions/checkout@v4` e
+# `cloudflare/wrangler-action@v3` — **código de terceiro, por tag móvel**, com acesso ao
+# `CLOUDFLARE_API_TOKEN` e ao `CLOUDFLARE_ACCOUNT_ID` que publicam o site institucional da
+# FT Consult. Tag móvel significa que o conteúdo por trás de `@v3` pode mudar sem que nada
+# neste repositório mude.
+#
+# Este arquivo cuida das **version updates**. Alertas de vulnerabilidade e security updates
+# são configuração de organização (Org Settings → Code security).
+#
+# Não há entry de `npm` nem de `docker` de propósito: este repositório é HTML estático mais
+# um `_worker.js` do Cloudflare, sem `package.json` e sem `Dockerfile`. Declarar ecossistema
+# que não tem manifesto correspondente é o defeito oposto e igualmente ruim — a configuração
+# passa a *parecer* mais coberta do que é, sem nunca abrir um PR.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
+    labels:
+      - "dependencies"
